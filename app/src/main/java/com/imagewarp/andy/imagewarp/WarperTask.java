@@ -39,10 +39,7 @@ abstract class WarperTask extends AsyncTask<Void,Integer,Bitmap> {
     @Override
     protected void onPreExecute() {
         progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Warping...");
-        progressDialog.setMax(width);
-        progressDialog.setProgress(0);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMessage("Warping...");
         progressDialog.show();
     }
 
@@ -52,9 +49,4 @@ abstract class WarperTask extends AsyncTask<Void,Integer,Bitmap> {
         progressDialog.hide();
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        int progress = values[0];
-        progressDialog.setProgress(progress);
-    }
 }

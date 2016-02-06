@@ -61,13 +61,15 @@ public class MainActivity extends AppCompatActivity {
         Button w2 = (Button) findViewById(R.id.w2);
         w2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                WaveTask wave = new WaveTask(MainActivity.this, imgButton);
+                wave.execute();
             }
         });
         Button w3 = (Button) findViewById(R.id.w3);
         w3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                BulgeTask bulge= new BulgeTask(MainActivity.this, imgButton);
+                bulge.execute();
             }
         });
         //TODO: TEMP SECTION END
