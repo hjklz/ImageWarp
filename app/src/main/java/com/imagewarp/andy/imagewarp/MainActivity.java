@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Button w1 = (Button) findViewById(R.id.w1);
         w1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SwirlTask swirl = new SwirlTask(getApplicationContext(), imgButton);
+                SwirlTask swirl = new SwirlTask(MainActivity.this, imgButton);
                 swirl.execute();
             }
         });
