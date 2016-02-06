@@ -29,7 +29,7 @@ abstract class WarperTask extends AsyncTask<Void,Integer,Bitmap> {
         this.height = refImage.getHeight();
         this.totalPixels = width*height;
 
-        this.newImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        //this.newImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         this.myRs = RenderScript.create(context);
     }
 
