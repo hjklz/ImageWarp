@@ -58,10 +58,10 @@ void swirl() {
 	for(j = 0; j < height; j++) {
 		for(i = 0; i < width; i++) {
 		    r = sqrt((float)pow((float)(i - xcenter), 2) + (pow((float)(j - ycenter), 2)));
-            theta = PI * r / 50;
+            theta = PI * r / 512;
 
 		    x = (i - xcenter) * cos(theta) + (j - ycenter) * sin(theta) + xcenter;
-		    x = (-1) * (i - xcenter) * sin(theta) + (j - ycenter) * cos(theta) + ycenter;
+		    y = (-1) * (i - xcenter) * sin(theta) + (j - ycenter) * cos(theta) + ycenter;
 
 		    //closest pixel center would be (x + 0.5) casted as int
 			setPixelAt(i, j, getPixelAt((int) (x+0.5), (int) (y+0.5)));
