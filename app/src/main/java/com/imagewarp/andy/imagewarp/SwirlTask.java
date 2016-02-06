@@ -2,14 +2,12 @@ package com.imagewarp.andy.imagewarp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.util.Log;
 import android.widget.ImageButton;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 public class SwirlTask extends WarperTask {
@@ -57,7 +55,8 @@ public class SwirlTask extends WarperTask {
         tScript.set_height(refImage.getHeight());
         tScript.bind_input(tInAllocation);
         tScript.bind_output(tOutAllocation);
-        tScript.invoke_XXX(50,50);
+//        tScript.invoke_XXX(50,50);
+        tScript.invoke_wave();
 
 //        Allocation alloc =  Allocation.createFromBitmap(myRs, newImage);
 //        ScriptC_swirl swirl = new ScriptC_swirl(myRs);
@@ -70,11 +69,12 @@ public class SwirlTask extends WarperTask {
         int pixels[] = new int[nrOfPixels];
         //doesn't replicate exactly, not sure why
         for(int i = 0; i < nrOfPixels; i++) {
-            int a = imgByteArray[4*i] & 0xFF;
-            int r = imgByteArray[4*i + 1] & 0xFF;
+            int r = imgByteArray[4*i] & 0xFF;
+            int b = imgByteArray[4*i + 1] & 0xFF;
             int g = imgByteArray[4*i + 2] & 0xFF;
-            int b = imgByteArray[4*i + 3] & 0xFF;
-            pixels[i] = Color.argb(a, r, g, b);
+            int a = imgByteArray[4*i + 3] & 0xFF;
+
+            pixels[i] = Color.argb(a, r, b, g);
         }
         newImage = Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888);
 
