@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.renderscript.RenderScript;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -34,10 +35,14 @@ public class MainActivity extends AppCompatActivity {
     private Button saveButton;
     private Button undoButton;
 
+    RenderScript myRs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myRs = RenderScript.create(this);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -45,6 +50,29 @@ public class MainActivity extends AppCompatActivity {
         imgButton = (ImageButton) findViewById(R.id.Image);
         imgButton.setTag(NO_IMAGE);
 
+        //TODO: TEMP SECTION START
+        Button w1 = (Button) findViewById(R.id.w1);
+        w1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SwirlTask swirl = new SwirlTask(getApplicationContext(), imgButton);
+                swirl.execute();
+            }
+        });
+        Button w2 = (Button) findViewById(R.id.w2);
+        w2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+        Button w3 = (Button) findViewById(R.id.w3);
+        w3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+        //TODO: TEMP SECTION END
+
+        //could refactor these onClicks to use tags and a single listener
         saveButton = (Button) findViewById(R.id.save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -59,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //could refactor these onClicks to use tags and a single listener
         Button loadButton = (Button) findViewById(R.id.Load);
         loadButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
