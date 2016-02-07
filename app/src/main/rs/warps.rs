@@ -57,7 +57,7 @@ void swirl() {
 
 	for(j = 0; j < height; j++) {
 		for(i = 0; i < width; i++) {
-		    r = sqrt((float)pow((float)(i - xcenter), 2) + (pow((float)(j - ycenter), 2)));
+		    r = sqrt((float) (pow((float)(i - xcenter), 2) + pow((float)(j - ycenter), 2)));
             theta = PI * r / 512;
 
 		    x = (i - xcenter) * cos(theta) + (j - ycenter) * sin(theta) + xcenter;
@@ -72,22 +72,29 @@ void swirl() {
 void bulge() {
 
 	int i, j;
-	float xcenter, ycenter, r, rn, a, x, y;
+	float xcenter, ycenter, r, rn, a, x, y, b, c, d, s;
 
     xcenter = width/2;
     ycenter = height/2;
 
 	for(j = 0; j < height; j++) {
 		for(i = 0; i < width; i++) {
-		    r = sqrt((float)(pow((float)(i-xcenter), 2) + pow((float)(j-ycenter), 2)));
-		    rn = pow(r, 2.5) / fmax(xcenter, ycenter);
-		    a = atan2((float) (i- xcenter), (float) (j - ycenter));
 
-		    x = rn * cos(a) + xcenter;
-		    y = rn * sin(a) + ycenter;
+            r = sqrt((float) (pow((float)(i - xcenter), 2) + pow((float)(j - ycenter), 2)));
+            a = atan2((float) (j - ycenter), (float)(i - xcenter));
 
-		    //closest pixel center would be (x +0.5) casted as int
-			setPixelAt(i, j, getPixelAt((int) (x+0.5), (int) (y+0.5)));
+//		    b = 3; c = 0.6; d = 1/500;
+//		    s = 1/(float)(1+exp((float)(b*(c-d*r))));
+
+//		    rn = r*s;
+            rn = pow(r, 2.5) / max(height, width);
+
+            x = rn * cos(a) + xcenter;
+            y = rn * sin(a) + ycenter;
+
+            //closest pixel center would be (x +0.5) casted as int
+            setPixelAt(i, j, getPixelAt((int) (x+0.5), (int) (y+0.5)));
+
 		}
 	}
 }
