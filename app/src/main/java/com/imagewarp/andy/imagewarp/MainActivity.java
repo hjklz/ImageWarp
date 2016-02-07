@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        oneFingerDetector = new GestureDetectorCompat(this, new OneFingerGestureListener());
-        twoFingerDetector = new ScaleGestureDetector(this, new TwoFingerGestureListener());
-
         myRs = RenderScript.create(this);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         imgButton = (ImageButton) findViewById(R.id.Image);
         imgButton.setTag(NO_IMAGE);
 
-        //TODO: TEMP SECTION START
+        /*//TEMP SECTION START
         Button w1 = (Button) findViewById(R.id.w1);
         w1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -79,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 bulge.execute();
             }
         });
-        //TODO: TEMP SECTION END
+        //TEMP SECTION END*/
 
         //could refactor these onClicks to use tags and a single listener
         saveButton = (Button) findViewById(R.id.save);
@@ -212,13 +209,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addGestures() {
+        oneFingerDetector = new GestureDetectorCompat(this, new OneFingerGestureListener(this, imgButton));
+        twoFingerDetector = new ScaleGestureDetector(this, new TwoFingerGestureListener(this, imgButton));
+
         imgButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 if (!oneFingerDetector.onTouchEvent(event)){
-                    if (!twoFingerDetector.onTouchEvent(event)) {
-
-                    }
+                    twoFingerDetector.onTouchEvent(event);
                 }
 
                 return true;

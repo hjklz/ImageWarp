@@ -1,18 +1,30 @@
 package com.imagewarp.andy.imagewarp;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.ImageButton;
 
 public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureListener {
 
     private static final String DEBUG_TAG = "Scroll";
+
+    private Context c;
+    private ImageButton img;
+
     private boolean swipeHandled, swirlHandled;
 
     private float oldX;
     private float oldY;
 
     private boolean[] swirlcheck;
+
+    public OneFingerGestureListener (Context c, ImageButton img) {
+        super();
+        this.c = c;
+        this.img = img;
+    }
 
     @Override
     public boolean onDown(MotionEvent event) {
@@ -21,7 +33,7 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
         swirlcheck = new boolean[] {false, false, false, false}; //[-,+] ,[+, +] ,[+, -] ,[-, -]
         swipeHandled = false;
         swirlHandled = false;
-        Log.d(DEBUG_TAG,"onDown: " + event.toString());
+//        Log.d(DEBUG_TAG,"onDown: " + event.toString());
         return true;
     }
 
@@ -42,7 +54,9 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
             }
 
             if (((event2.getY() - event1.getY()) < -600)) {
-                Log.d(DEBUG_TAG, "onScroll: HERE!");
+//                Log.d(DEBUG_TAG, "onScroll: HERE!");
+                WaveTask wave = new WaveTask(c, img);
+                wave.execute();
                 swipeHandled = true;
                 return true;
             }
@@ -94,16 +108,17 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
         boolean isSwirl = true;
 
         for (Boolean b: swirlcheck) {
-
             if(!b) {
                 isSwirl = false;
             }
         }
 
-        Log.d(DEBUG_TAG, "swirlcheck: " + swirlcheck[0] + " " + swirlcheck[1] + " " + swirlcheck[2] + " " + swirlcheck[3]);
+//        Log.d(DEBUG_TAG, "Swirlcheck: " + swirlcheck[0] + " " + swirlcheck[1] + " " + swirlcheck[2] + " " + swirlcheck[3]);
 
         if (isSwirl) {
             Log.d(DEBUG_TAG, "swirled");
+            SwirlTask swirl = new SwirlTask(c, img);
+            swirl.execute();
             swirlHandled = true;
             return true;
         }

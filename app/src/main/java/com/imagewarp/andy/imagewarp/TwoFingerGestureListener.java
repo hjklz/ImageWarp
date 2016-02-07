@@ -1,14 +1,26 @@
 package com.imagewarp.andy.imagewarp;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
+import android.widget.ImageButton;
 
 //adapted from http://www.techotopia.com/index.php/Implementing_Android_Custom_Gesture_and_Pinch_Recognition#Detecting_Pinch_Gestures
 
 public class TwoFingerGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
 
     private static final String DEBUG_TAG = "Pinch";
+
+    private Context c;
+    private ImageButton img;
+
     private boolean warpHandled;
+
+    public TwoFingerGestureListener (Context c, ImageButton img) {
+        super();
+        this.c = c;
+        this.img = img;
+    }
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
@@ -17,17 +29,12 @@ public class TwoFingerGestureListener extends ScaleGestureDetector.SimpleOnScale
             return true;
         }
 
-        float scaleFactor = detector.getScaleFactor();
+        BulgeTask bulge= new BulgeTask(c, img);
+        bulge.execute();
 
-        if (scaleFactor > 1) {
-            warpHandled = true;
-            Log.d(DEBUG_TAG, "onScroll: HERE!");
-//            scaleText.setText("Zooming Out");
-        } else {
-            warpHandled = true;
-            Log.d(DEBUG_TAG, "onScroll: HERE2!");
-//            scaleText.setText("Zooming In");
-        }
+        warpHandled = true;
+//        Log.d(DEBUG_TAG, "onScroll: HERE2!");
+
         return true;
     }
 

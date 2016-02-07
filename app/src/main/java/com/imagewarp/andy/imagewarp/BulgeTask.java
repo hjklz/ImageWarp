@@ -9,9 +9,6 @@ import android.widget.ImageButton;
 
 import java.nio.ByteBuffer;
 
-/**
- * Created by Andy on 2016-02-06.
- */
 public class BulgeTask extends WarperTask{
 
     BulgeTask(Context context, ImageButton imageButton) {
