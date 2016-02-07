@@ -1,8 +1,6 @@
 package com.imagewarp.andy.imagewarp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,10 +9,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.renderscript.RenderScript;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -35,12 +36,18 @@ public class MainActivity extends AppCompatActivity {
     private Button saveButton;
     private Button undoButton;
 
+    private GestureDetectorCompat oneFingerDetector;
+    private ScaleGestureDetector twoFingerDetector;
+
     RenderScript myRs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        oneFingerDetector = new GestureDetectorCompat(this, new OneFingerGestureListener());
+        twoFingerDetector = new ScaleGestureDetector(this, new TwoFingerGestureListener());
 
         myRs = RenderScript.create(this);
 
@@ -121,19 +128,17 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             //convolution mask with no image doesn't make sense
-            if ((Integer)imgButton.getTag() == NO_IMAGE) {
-                Toast.makeText(this, "Load Image first!", Toast.LENGTH_LONG).show();
-            } else {
-                Intent settings = new Intent(this, SettingsActivity.class);
-                //giving image parameters to settings
-                //http://stackoverflow.com/questions/8880376/how-to-get-height-and-width-of-a-image-used-in-android
-                //http://stackoverflow.com/questions/8306623/get-bitmap-attached-to-imageview
 
-                Bitmap b = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
+            Intent settings = new Intent(this, SettingsActivity.class);
+            //giving image parameters to settings
+            //http://stackoverflow.com/questions/8880376/how-to-get-height-and-width-of-a-image-used-in-android
+            //http://stackoverflow.com/questions/8306623/get-bitmap-attached-to-imageview
 
-                //settings.putExtra("ImageSize", Math.min(b.getHeight(),b.getWidth()));
-                startActivity(settings);
-            }
+            Bitmap b = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
+
+            //settings.putExtra("ImageSize", Math.min(b.getHeight(),b.getWidth()));
+            startActivity(settings);
+
 
             return true;
         }
@@ -184,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //Toast.makeText(this, Integer.toString(getSharedPreferences("ImageFilter", Context.MODE_PRIVATE).getInt(getString(R.string.convuMask), 1)), Toast.LENGTH_LONG).show();
 
+                    addGestures();
+
                     saveButton.setEnabled(true);
                     undoButton.setEnabled(true);
 
@@ -196,7 +203,26 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == CAM_REQUEST) {
                 Bitmap pic = (Bitmap) data.getExtras().get("data");
                 imgButton.setImageBitmap(pic);
+                imgButton.setTag(HAS_IMAGE);
+                addGestures();
+                saveButton.setEnabled(true);
+                undoButton.setEnabled(true);
             }
         }
+    }
+
+    private void addGestures() {
+        imgButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                if (!oneFingerDetector.onTouchEvent(event)){
+                    if (!twoFingerDetector.onTouchEvent(event)) {
+
+                    }
+                }
+
+                return true;
+            }
+        });
     }
 }
