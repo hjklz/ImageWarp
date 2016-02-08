@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.AsyncWarps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,11 +8,13 @@ import android.renderscript.Element;
 import android.util.Log;
 import android.widget.ImageButton;
 
+import com.imagewarp.andy.imagewarp.ScriptC_warps;
+
 import java.nio.ByteBuffer;
 
 public class SwirlTask extends WarperTask {
 
-    SwirlTask(Context context, ImageButton imageButton) {
+    public SwirlTask(Context context, ImageButton imageButton) {
         super(context, imageButton);
     }
 

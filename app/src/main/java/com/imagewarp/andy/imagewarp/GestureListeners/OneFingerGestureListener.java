@@ -1,11 +1,14 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.GestureListeners;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageButton;
+
+import com.imagewarp.andy.imagewarp.AsyncWarps.SwirlTask;
+import com.imagewarp.andy.imagewarp.Helpers.UndoStack;
+import com.imagewarp.andy.imagewarp.AsyncWarps.WaveTask;
 
 public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureListener {
 

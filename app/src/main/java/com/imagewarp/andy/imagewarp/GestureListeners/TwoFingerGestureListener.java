@@ -1,10 +1,12 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.GestureListeners;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageButton;
+
+import com.imagewarp.andy.imagewarp.AsyncWarps.BulgeTask;
+import com.imagewarp.andy.imagewarp.Helpers.UndoStack;
 
 //adapted from http://www.techotopia.com/index.php/Implementing_Android_Custom_Gesture_and_Pinch_Recognition#Detecting_Pinch_Gestures
 

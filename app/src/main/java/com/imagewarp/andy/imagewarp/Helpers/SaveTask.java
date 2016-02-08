@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,7 +27,7 @@ public class SaveTask extends AsyncTask<Void,Void,Void>{
     Bitmap b;
     ProgressDialog progressDialog;
 
-    SaveTask (Context context, ImageButton imageButton) {
+    public SaveTask(Context context, ImageButton imageButton) {
         this.context = context;
         this.imageButton = imageButton;
         this.b = ((BitmapDrawable)imageButton.getDrawable()).getBitmap();

@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.AsyncWarps;
 
 import android.app.ProgressDialog;
 import android.content.Context;

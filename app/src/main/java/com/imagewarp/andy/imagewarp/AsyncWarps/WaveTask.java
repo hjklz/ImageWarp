@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.AsyncWarps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,11 +7,13 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.widget.ImageButton;
 
+import com.imagewarp.andy.imagewarp.ScriptC_warps;
+
 import java.nio.ByteBuffer;
 
-public class BulgeTask extends WarperTask{
+public class WaveTask extends WarperTask{
 
-    BulgeTask(Context context, ImageButton imageButton) {
+    public WaveTask(Context context, ImageButton imageButton) {
         super(context, imageButton);
     }
 
@@ -34,7 +36,7 @@ public class BulgeTask extends WarperTask{
         tScript.set_height(refImage.getHeight());
         tScript.bind_input(tInAllocation);
         tScript.bind_output(tOutAllocation);
-        tScript.invoke_bulge();
+        tScript.invoke_wave();
 
         tOutAllocation.copyTo(imgByteArray);
 

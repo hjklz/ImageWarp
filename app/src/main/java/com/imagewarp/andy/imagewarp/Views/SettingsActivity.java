@@ -1,6 +1,8 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.Views;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import com.imagewarp.andy.imagewarp.R;
 
 import java.util.ArrayList;
 
@@ -23,6 +27,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         setUndoPicker(5);
         sharedPref = getSharedPreferences("ImageWarp", Context.MODE_PRIVATE);
+
+        setResult(Activity.RESULT_CANCELED, new Intent());
 
         TextView curUndo = (TextView) findViewById(R.id.curUndo);
 
@@ -45,6 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.putInt(getString(R.string.undo), undoPicker.getValue());
 
                 editor.commit();
+                setResult(Activity.RESULT_OK, new Intent());
                 finish();
             }
         });

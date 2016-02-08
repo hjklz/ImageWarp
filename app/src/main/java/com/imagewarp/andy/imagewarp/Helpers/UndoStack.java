@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.Helpers;
 
 import android.graphics.Bitmap;
 
@@ -28,5 +28,9 @@ public class UndoStack {
 
     public int size() {
         return stack.size();
+    }
+
+    public void changeSize(int newSize) {
+        this.size = newSize;
     }
 }

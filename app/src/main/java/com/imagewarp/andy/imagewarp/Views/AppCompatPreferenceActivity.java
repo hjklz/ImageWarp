@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.Views;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

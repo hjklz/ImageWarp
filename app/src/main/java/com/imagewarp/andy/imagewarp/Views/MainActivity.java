@@ -1,4 +1,4 @@
-package com.imagewarp.andy.imagewarp;
+package com.imagewarp.andy.imagewarp.Views;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,7 +15,6 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +25,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.imagewarp.andy.imagewarp.GestureListeners.OneFingerGestureListener;
+import com.imagewarp.andy.imagewarp.R;
+import com.imagewarp.andy.imagewarp.Helpers.SaveTask;
+import com.imagewarp.andy.imagewarp.GestureListeners.TwoFingerGestureListener;
+import com.imagewarp.andy.imagewarp.Helpers.UndoStack;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int IMAGE_REQUEST = 57;
     public static final int CAM_REQUEST = 87;
+    public static final int UNDO_REQUEST = 37;
     public static final int NO_IMAGE = 0;
     public static final int HAS_IMAGE = 1;
 
@@ -132,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            
+
             Bitmap image = BitmapFactory.decodeStream(inputStream);
 
             imgButton.setImageBitmap(image);
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
         if ((Integer)imgButton.getTag() == NO_IMAGE)
         {
-           menu.findItem(R.id.discard).setVisible(false);
+            menu.findItem(R.id.discard).setVisible(false);
         }
         return true;
     }
@@ -166,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent settings = new Intent(this, SettingsActivity.class);
 
-            startActivity(settings);
+            startActivityForResult(settings, UNDO_REQUEST);
 
             return true;
         }
@@ -282,6 +288,10 @@ public class MainActivity extends AppCompatActivity {
                 saveButton.setEnabled(true);
                 undoButton.setEnabled(true);
                 invalidateOptionsMenu();
+            }
+
+            if (requestCode == UNDO_REQUEST) {
+                uStack.changeSize(sharedPref.getInt(getString(R.string.undo), 1));
             }
         }
     }
