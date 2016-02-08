@@ -72,7 +72,7 @@ public class SaveTask extends AsyncTask<Void,Void,Void>{
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        Toast.makeText(context, "Saved as iWARP" + s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Saved as " + s, Toast.LENGTH_SHORT).show();
         progressDialog.hide();
         super.onPostExecute(aVoid);
     }

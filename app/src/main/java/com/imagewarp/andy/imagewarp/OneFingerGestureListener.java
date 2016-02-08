@@ -1,6 +1,7 @@
 package com.imagewarp.andy.imagewarp;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
 
     private Context c;
     private ImageButton img;
+    private UndoStack uStack;
 
     private boolean swipeHandled, swirlHandled;
 
@@ -20,10 +22,11 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
 
     private boolean[] swirlcheck;
 
-    public OneFingerGestureListener (Context c, ImageButton img) {
+    public OneFingerGestureListener (Context c, ImageButton img, UndoStack uStack) {
         super();
         this.c = c;
         this.img = img;
+        this.uStack = uStack;
     }
 
     @Override
@@ -55,6 +58,7 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
 
             if (((event2.getY() - event1.getY()) < -600)) {
 //                Log.d(DEBUG_TAG, "onScroll: HERE!");
+                uStack.push(((BitmapDrawable)img.getDrawable()).getBitmap());
                 WaveTask wave = new WaveTask(c, img);
                 wave.execute();
                 swipeHandled = true;
@@ -116,7 +120,8 @@ public class OneFingerGestureListener extends GestureDetector.SimpleOnGestureLis
 //        Log.d(DEBUG_TAG, "Swirlcheck: " + swirlcheck[0] + " " + swirlcheck[1] + " " + swirlcheck[2] + " " + swirlcheck[3]);
 
         if (isSwirl) {
-            Log.d(DEBUG_TAG, "swirled");
+//            Log.d(DEBUG_TAG, "swirled");
+            uStack.push(((BitmapDrawable) img.getDrawable()).getBitmap());
             SwirlTask swirl = new SwirlTask(c, img);
             swirl.execute();
             swirlHandled = true;

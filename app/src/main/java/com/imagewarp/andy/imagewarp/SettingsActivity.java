@@ -6,10 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private NumberPicker undoPicker;
     SharedPreferences sharedPref;
 
     @Override
@@ -17,12 +21,13 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
-        sharedPref = getSharedPreferences("ImageFilter", Context.MODE_PRIVATE);
+        setUndoPicker(5);
+        sharedPref = getSharedPreferences("ImageWarp", Context.MODE_PRIVATE);
 
-        TextView curConvu = (TextView) findViewById(R.id.curConvu);
+        TextView curUndo = (TextView) findViewById(R.id.curUndo);
 
         //snippet 2
-        // curConvu.setText(Integer.toString(sharedPref.getInt(getString(R.string.convuMask), 1))); // grab value from shared preferences
+        curUndo.setText(Integer.toString(sharedPref.getInt(getString(R.string.undo), 1))); // grab value from shared preferences
 
         Button cancel = (Button) findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -37,12 +42,23 @@ public class SettingsActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPref.edit();
 
                 //the number picker value is the index so need to reference the displayed values to get actual value
-                //editor.putInt(getString(R.string.convuMask), Integer.parseInt(convuPicker.getDisplayedValues()[convuPicker.getValue()-1]));
+                editor.putInt(getString(R.string.undo), undoPicker.getValue());
 
                 editor.commit();
                 finish();
             }
         });
+    }
+
+    private void setUndoPicker(int maxSize) {
+
+        undoPicker = (NumberPicker) findViewById(R.id.undoPicker);
+        undoPicker.setWrapSelectorWheel(false);
+
+        // As per http://stackoverflow.com/questions/22370310/modifying-or-changing-min-max-and-displayed-values-for-numberpicker
+        // making number picker ignore the length check of the values
+        undoPicker.setMinValue(1);
+        undoPicker.setMaxValue(maxSize);
     }
 
 }

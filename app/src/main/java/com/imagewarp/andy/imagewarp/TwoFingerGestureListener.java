@@ -1,6 +1,7 @@
 package com.imagewarp.andy.imagewarp;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageButton;
@@ -13,13 +14,15 @@ public class TwoFingerGestureListener extends ScaleGestureDetector.SimpleOnScale
 
     private Context c;
     private ImageButton img;
+    private UndoStack uStack;
 
     private boolean warpHandled;
 
-    public TwoFingerGestureListener (Context c, ImageButton img) {
+    public TwoFingerGestureListener (Context c, ImageButton img, UndoStack uStack) {
         super();
         this.c = c;
         this.img = img;
+        this.uStack = uStack;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class TwoFingerGestureListener extends ScaleGestureDetector.SimpleOnScale
             return true;
         }
 
+        uStack.push(((BitmapDrawable)img.getDrawable()).getBitmap());
         BulgeTask bulge= new BulgeTask(c, img);
         bulge.execute();
 

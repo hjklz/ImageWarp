@@ -1,11 +1,11 @@
 package com.imagewarp.andy.imagewarp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     RenderScript myRs;
 
+    SharedPreferences sharedPref;
+    private UndoStack uStack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         imgButton = (ImageButton) findViewById(R.id.Image);
         imgButton.setTag(NO_IMAGE);
+
+        sharedPref = getSharedPreferences("ImageWarp", Context.MODE_PRIVATE);
+        uStack = new UndoStack(sharedPref.getInt(getString(R.string.undo), 1));
 
         /*//TEMP SECTION START
         Button w1 = (Button) findViewById(R.id.w1);
@@ -91,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         undoButton = (Button) findViewById(R.id.undo);
         undoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                onUndoClicked(v);
             }
         });
 
@@ -124,20 +130,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //convolution mask with no image doesn't make sense
 
             Intent settings = new Intent(this, SettingsActivity.class);
-            //giving image parameters to settings
-            //http://stackoverflow.com/questions/8880376/how-to-get-height-and-width-of-a-image-used-in-android
-            //http://stackoverflow.com/questions/8306623/get-bitmap-attached-to-imageview
 
-            Bitmap b = ((BitmapDrawable)imgButton.getDrawable()).getBitmap();
-
-            //settings.putExtra("ImageSize", Math.min(b.getHeight(),b.getWidth()));
             startActivity(settings);
 
+            return true;
+        }
+
+        if (id == R.id.discard) {
+
+            Intent settings = new Intent(this, SettingsActivity.class);
+
+            startActivity(settings);
 
             return true;
         }
@@ -150,6 +156,14 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveImageClicked (View v) {
         SaveTask save = new SaveTask(this, imgButton);
         save.execute();
+    }
+
+    public void onUndoClicked (View v) {
+        if (uStack.size() == 0) {
+            Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
+        } else {
+            imgButton.setImageBitmap(uStack.pop());
+        }
     }
 
     //the method will run then load image button is clicked
@@ -181,17 +195,12 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     //image load success, change imagebutton and activate buttons
-                    //reset convolution mask, cancel any existing filtering
 
                     InputStream inputStream = getContentResolver().openInputStream(imageURI);
                     Bitmap image = BitmapFactory.decodeStream(inputStream);
 
                     imgButton.setImageBitmap(image);
                     imgButton.setTag(HAS_IMAGE);
-
-                    //SharedPreferences.Editor editor = getSharedPreferences("ImageFilter", Context.MODE_PRIVATE).edit();
-                    //editor.putInt(getString(R.string.convuMask), 1);
-                   //editor.commit();
 
                     //Toast.makeText(this, Integer.toString(getSharedPreferences("ImageFilter", Context.MODE_PRIVATE).getInt(getString(R.string.convuMask), 1)), Toast.LENGTH_LONG).show();
 
@@ -218,8 +227,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addGestures() {
-        oneFingerDetector = new GestureDetectorCompat(this, new OneFingerGestureListener(this, imgButton));
-        twoFingerDetector = new ScaleGestureDetector(this, new TwoFingerGestureListener(this, imgButton));
+        oneFingerDetector = new GestureDetectorCompat(this, new OneFingerGestureListener(this, imgButton, uStack));
+        twoFingerDetector = new ScaleGestureDetector(this, new TwoFingerGestureListener(this, imgButton, uStack));
 
         imgButton.setOnTouchListener(new View.OnTouchListener() {
             @Override

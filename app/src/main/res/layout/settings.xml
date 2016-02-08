@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/curConvu"
+        android:id="@+id/curUndo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -28,6 +28,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Number of Undos Allowed: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <NumberPicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/undoPicker"
+        android:layout_weight="0.5"/>
+
+    <TextView
+        android:id="@+id/label3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WARNING: Pressing OK will reset the current undo list"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
