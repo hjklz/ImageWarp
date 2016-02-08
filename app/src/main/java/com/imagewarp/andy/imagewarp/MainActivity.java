@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -12,6 +13,7 @@ import android.renderscript.RenderScript;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         saveButton = (Button) findViewById(R.id.save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                onSaveImageClicked(v);
             }
         });
 
@@ -141,6 +143,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //the method will save image when button is clicked
+    //adapted from http://stackoverflow.com/questions/649154/save-bitmap-to-location
+    public void onSaveImageClicked (View v) {
+        SaveTask save = new SaveTask(this, imgButton);
+        save.execute();
     }
 
     //the method will run then load image button is clicked
@@ -215,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         imgButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
-                if (!oneFingerDetector.onTouchEvent(event)){
+                if (!oneFingerDetector.onTouchEvent(event)) {
                     twoFingerDetector.onTouchEvent(event);
                 }
 
