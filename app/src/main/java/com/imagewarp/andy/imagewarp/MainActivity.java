@@ -1,6 +1,7 @@
 package com.imagewarp.andy.imagewarp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,15 +12,18 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.renderscript.RenderScript;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -123,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if ((Integer)imgButton.getTag() == NO_IMAGE)
+        {
+           menu.findItem(R.id.discard).setVisible(false);
+        }
         return true;
     }
 
@@ -141,9 +150,36 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.discard) {
 
-            Intent settings = new Intent(this, SettingsActivity.class);
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View promptView = layoutInflater.inflate(R.layout.discard_prompt, null);
 
-            startActivity(settings);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+            alertDialogBuilder.setView(promptView);
+
+            // setup a dialog window
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            imgButton.setImageResource(android.R.color.transparent);
+                            saveButton.setEnabled(false);
+                            undoButton.setEnabled(false);
+                            imgButton.setOnTouchListener(null);
+                            imgButton.setTag(NO_IMAGE);
+                            invalidateOptionsMenu();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            // create an alert dialog
+            AlertDialog alertD = alertDialogBuilder.create();
+
+            alertD.show();
 
             return true;
         }
@@ -208,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
                     saveButton.setEnabled(true);
                     undoButton.setEnabled(true);
-
+                    invalidateOptionsMenu();
                 } catch (FileNotFoundException e) {
                     Toast.makeText(this, "Unable to load image", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -222,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                 addGestures();
                 saveButton.setEnabled(true);
                 undoButton.setEnabled(true);
+                invalidateOptionsMenu();
             }
         }
     }
