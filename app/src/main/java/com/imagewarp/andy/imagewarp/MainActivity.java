@@ -23,7 +23,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -54,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Get the intent that started this activity
+        Intent intent = getIntent();
+        Uri data = intent.getData();
 
         myRs = RenderScript.create(this);
 
@@ -121,6 +124,26 @@ public class MainActivity extends AppCompatActivity {
 
         saveButton.setEnabled(false);
         undoButton.setEnabled(false);
+
+        if (data != null) {
+            InputStream inputStream = null;
+            try {
+                inputStream = getContentResolver().openInputStream(data);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            
+            Bitmap image = BitmapFactory.decodeStream(inputStream);
+
+            imgButton.setImageBitmap(image);
+            imgButton.setTag(HAS_IMAGE);
+
+            addGestures();
+
+            saveButton.setEnabled(true);
+            undoButton.setEnabled(true);
+            invalidateOptionsMenu();
+        }
     }
 
     @Override
